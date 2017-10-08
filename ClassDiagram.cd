@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Data">
+    <Position X="0.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAACAAEAAAAAAAAAAAAAAAgAABAAECACAEAABAA=</HashCode>
+      <FileName>Data.hpp</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="_net" />
+      <Field Name="_man" />
+      <Field Name="_vir" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="Network">
+    <Position X="4" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAgAAAAAAAEAAAAAAAAAAAAAAAAAAAAABAAQAAAA=</HashCode>
+      <FileName>Network.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EventManager">
+    <Position X="6" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AACAExACAAAAAABAAABAQAAAAAkAAAAAAACAAAAAAAA=</HashCode>
+      <FileName>EventManager.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Viral">
+    <Position X="8" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAgAAJAAAARAAAAAAIAAAAAAACAAAAAAAAAAAEAACA=</HashCode>
+      <FileName>Viral.hpp</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
