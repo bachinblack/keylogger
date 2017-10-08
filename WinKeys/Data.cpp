@@ -24,7 +24,7 @@ Data::~Data()
 	UnhookWindowsHookEx(_mHook);
 }
 
-static void	getTime(BinaryStruct& s)
+void	getTime(BinaryStruct& s)
 {
 	SYSTEMTIME	time;
 

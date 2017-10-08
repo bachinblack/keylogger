@@ -9,6 +9,7 @@
 #include <boost/bind.hpp>
 #include <boost/asio.hpp>
 #include <boost/asio/ssl.hpp>
+#include <Lmcons.h>
 #include "Protocol.hpp"
 
 enum
@@ -31,7 +32,7 @@ private:
 	boost::asio::ssl::stream<boost::asio::ip::tcp::socket> socket_;
 	char request_[max_length];
 	char reply_[max_length];
-	bool _sendData;
+	//bool _sendData;
 };
 
 class Network

@@ -24,8 +24,12 @@ enum Command
 {
 	Start = 0x00,
 	Stop,
-	Ping,
+	Ping
 };
 
 #define KO 0x00
 #define OK 0x01
+
+/* Special VKCode */
+
+#define VK_MOUSEPOS		  0x07

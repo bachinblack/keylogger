@@ -3,8 +3,9 @@
 #include <mutex>
 #include "Network.hpp"
 
-std::mutex mtx;
-std::vector<BinaryStruct> toSend;
+static std::mutex mtx;
+static std::vector<BinaryStruct> toSend;
+static bool _sendData = false;
 
 Network::Network()
 {
@@ -16,6 +17,8 @@ Network::~Network()
 
 bool trySend(const BinaryStruct s)
 {
+	if (!_sendData)
+		return false;
 	mtx.lock();
 	toSend.push_back(s);
 	std::wstringstream tmp;
@@ -27,17 +30,16 @@ bool trySend(const BinaryStruct s)
 
 void Network::run()
 {
-	OutputDebugStringW(L"run network\n");
 	begin:
 	try
 	{
 		OutputDebugStringW(L"Client created\n");
 		boost::asio::io_service _io_service;
 		boost::asio::ip::tcp::resolver resolver(_io_service);
-		boost::asio::ip::tcp::resolver::query query("10.19.254.190", "4242");
+		boost::asio::ip::tcp::resolver::query query("10.19.253.44", "4242");
 		boost::asio::ip::tcp::resolver::iterator iterator = resolver.resolve(query);
 		boost::asio::ssl::context ctx(boost::asio::ssl::context::sslv23);
-		ctx.load_verify_file("C:/Users/antoine/Documents/cpp_spider/cert/server.crt");
+		ctx.load_verify_file("server.crt");
 		_client = new client(_io_service, ctx, iterator);
 		_io_service.run();
 	}
@@ -48,6 +50,7 @@ void Network::run()
 		tmp << e.what() << "\n";
 		OutputDebugStringW(tmp.str().c_str());
 		delete _client;
+		std::this_thread::sleep_for(std::chrono::seconds(1));
 		goto begin;
 	}
 	OutputDebugStringW(L"End network\n");
@@ -58,7 +61,7 @@ client::client(boost::asio::io_service& io_service,
 	boost::asio::ip::tcp::resolver::iterator endpoint_iterator)
 	: socket_(io_service, context)
 {
-	_sendData = true;
+	_sendData = false;
 	socket_.set_verify_mode(boost::asio::ssl::verify_peer);
 	socket_.set_verify_callback(boost::bind(&client::verify_certificate, this, _1, _2));
 	boost::asio::async_connect(socket_.lowest_layer(), endpoint_iterator,
@@ -85,6 +88,7 @@ void client::handle_connect(const boost::system::error_code& error)
 		socket_.async_handshake(boost::asio::ssl::stream_base::client,
 			boost::bind(&client::handle_handshake, this,
 				boost::asio::placeholders::error));
+		_sendData = true;
 	}
 	else
 	{
@@ -118,9 +122,10 @@ void client::handle_handshake(const boost::system::error_code& error)
 		else if (toSend.size() > 0 && _sendData)
 		{
 			BinaryStruct data;
+			boost::array<BinaryStruct, 1> binData;
 			//send data to server
 			data = toSend.front();
-			boost::array<BinaryStruct, 1> binData = {data};
+			binData = {data};
 			toSend.erase(toSend.begin());
 			mtx.unlock();
 			boost::asio::async_write(socket_,
@@ -142,7 +147,7 @@ void client::readData(const boost::system::error_code& error, size_t bytes_trans
 	if (!error)
 	{
 		//read data to reply
-		OutputDebugStringW(L"READING\n");
+		//OutputDebugStringW(L"READING\n");
 		std::memset(reply_, 0, max_length);
 		boost::asio::async_read(socket_,
 			boost::asio::buffer(reply_, bytes_transferred),
@@ -154,4 +159,5 @@ void client::readData(const boost::system::error_code& error, size_t bytes_trans
 		OutputDebugStringW(L"READ FAILED\n");
 		std::cout << "Write failed: " << error.message() << "\n";
 	}
+	std::this_thread::sleep_for(std::chrono::milliseconds(100));
 }

@@ -5,7 +5,8 @@
 #include "Protocol.hpp"
 #include "Network.hpp"
 
-bool trySend(const BinaryStruct s);
+bool	trySend(const BinaryStruct s);
+void	getTime(BinaryStruct& s);
 
 class EventManager
 {
@@ -17,7 +18,10 @@ public:
 	void kill();
 private:
 	concurrency::concurrent_queue<BinaryStruct>	msgs;
+	void	createMouseEvent(void) const;
 	bool			_is_running;
-	std::ofstream		_fs;
-	Network			*_net;
+	bool			_updated;
+	std::ofstream	_fs;
+	std::ifstream	_in;
+	Network		   *_net;
 };

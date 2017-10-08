@@ -41,5 +41,8 @@
     <ClInclude Include="Data.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Documents\Visual Studio 2015\Projects\WinKeys\WinKeys\VKCodes.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
